@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#get-started" class="md-skip">
+        <a href="#get-started-part-1" class="md-skip">
           Skip to content
         </a>
       
@@ -234,17 +234,18 @@
     
   
   
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
-        
-  
-  
     
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
   
-  Get Started
+  
+  Part 1 - Basics
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -254,32 +255,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../interpreting-output/" class="md-tabs__link">
+      <a href="../log-files/" class="md-tabs__link">
         
   
   
     
   
-  Interpreting Output
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../how-it-works/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  How It Works
+  Part 2 - Log Files
 
       </a>
     </li>
@@ -347,6 +329,63 @@
     
       
       
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 - Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part 1 - Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
     
@@ -440,9 +479,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
@@ -467,9 +507,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
@@ -483,6 +524,41 @@
     
   
     How It Works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../log-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 - Log Files
   
 
     
@@ -560,7 +636,7 @@
 
 
 
-<h1 id="get-started">Get Started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h1>
+<h1 id="get-started-part-1">Get Started (Part 1)<a class="headerlink" href="#get-started-part-1" title="Permanent link">&para;</a></h1>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/agardnerIT/otel-weaver-hands-on
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>otel-weaver-hands-on
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -573,7 +649,7 @@
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>docker<span class="w"> </span>pull<span class="w"> </span>otel/weaver
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># Validate the file syntax (should be OK on a fresh clone)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>:/work<span class="w"> </span>-w<span class="w"> </span>/work<span class="w"> </span>otel/weaver<span class="w"> </span>registry<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>/work
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>:/work<span class="w"> </span>-w<span class="w"> </span>/work<span class="w"> </span>otel/weaver<span class="w"> </span>registry<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>/work/model
 </span></code></pre></div>
 <p>Now open 2 terminal windows:</p>
 <ul>
@@ -582,7 +658,7 @@
 </ul>
 <h2 id="terminal-1">Terminal 1<a class="headerlink" href="#terminal-1" title="Permanent link">&para;</a></h2>
 <p>Will run for 30s or until you press <code>Ctrl+C</code>:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>:/work<span class="w"> </span>-w<span class="w"> </span>/work<span class="w"> </span>-p<span class="w"> </span><span class="m">4317</span>:4317<span class="w"> </span>-p<span class="w"> </span><span class="m">4320</span>:4320<span class="w"> </span>otel/weaver<span class="w"> </span>registry<span class="w"> </span>live-check<span class="w"> </span>-r<span class="w"> </span>/work<span class="w"> </span>--advice-policies<span class="w"> </span>/work/policies<span class="w"> </span>--otlp-grpc-address<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--inactivity-timeout<span class="w"> </span><span class="m">30</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>:/work<span class="w"> </span>-w<span class="w"> </span>/work<span class="w"> </span>-p<span class="w"> </span><span class="m">4317</span>:4317<span class="w"> </span>-p<span class="w"> </span><span class="m">4320</span>:4320<span class="w"> </span>otel/weaver<span class="w"> </span>registry<span class="w"> </span>live-check<span class="w"> </span>-r<span class="w"> </span>/work/model<span class="w"> </span>--advice-policies<span class="w"> </span>/work/policies<span class="w"> </span>--otlp-grpc-address<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--inactivity-timeout<span class="w"> </span><span class="m">30</span>
 </span></code></pre></div>
 <h2 id="terminal-2">Terminal 2<a class="headerlink" href="#terminal-2" title="Permanent link">&para;</a></h2>
 <p>This Python file will send 3 log records to Weaver then exit.</p>
@@ -594,7 +670,7 @@
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>=== Sending: wrong-key log with attributes: {'service.name': 'team-c', 'cost-code': 'ABC1234'} to Weaver ===
 </span></code></pre></div>
 <p>When the script is finished, you can switch to Terminal 1 and press Ctrl+C to stop Weaver.</p>
-<p>Next: <a href="../interpreting-output/">interpret the output</a>.</p>
+<p>Next: <a href="../interpreting-output/">interpret the output</a>. Once you're comfortable, move on to <a href="../log-files/">Part 2: checking log files</a>.</p>
 
 
 

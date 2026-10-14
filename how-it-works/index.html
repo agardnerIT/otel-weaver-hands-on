@@ -16,6 +16,8 @@
         <link rel="prev" href="../interpreting-output/">
       
       
+        <link rel="next" href="../log-files/">
+      
       
         
       
@@ -229,37 +231,21 @@
   
   
   
-  
-    <li class="md-tabs__item">
-      <a href="../get-started/" class="md-tabs__link">
-        
+    
   
   
     
-  
-  Get Started
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../interpreting-output/" class="md-tabs__link">
-        
-  
-  
     
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../get-started/" class="md-tabs__link">
+          
   
-  Interpreting Output
+  
+  Part 1 - Basics
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -267,17 +253,15 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../log-files/" class="md-tabs__link">
         
   
   
     
   
-  How It Works
+  Part 2 - Log Files
 
       </a>
     </li>
@@ -347,6 +331,63 @@
       
   
   
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 - Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part 1 - Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
   
   
     <li class="md-nav__item">
@@ -369,9 +410,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
@@ -396,9 +438,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
     
@@ -485,10 +528,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#required-attribute-part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required attribute (Part 2)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../log-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 - Log Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -541,6 +630,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#required-attribute-part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required attribute (Part 2)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -559,8 +659,8 @@
 
 
 <h1 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h1>
-<p>The story starts with the <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/manifest.yaml">manifest.yaml</a> file. This file says "we're defining a new schema called <code>acme</code> and also importing another pre-existing schema from the OpenTelemetry project."</p>
-<p><a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/manifest.yaml">manifest.yaml</a> pairs with <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/imports.yaml">model/imports.yaml</a> and this file just tells weaver to import everything from the dependencies (i.e. the pre-existing OTEL semantic conventions).</p>
+<p>The story starts with the <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/manifest.yaml">model/manifest.yaml</a> file. This file says "we're defining a new schema called <code>acme</code> and also importing another pre-existing schema from the OpenTelemetry project."</p>
+<p><a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/manifest.yaml">model/manifest.yaml</a> pairs with <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/imports.yaml">model/imports.yaml</a> and this file just tells weaver to import everything from the dependencies (i.e. the pre-existing OTEL semantic conventions).</p>
 <h2 id="the-attribute-key">The attribute key<a class="headerlink" href="#the-attribute-key" title="Permanent link">&para;</a></h2>
 <p>Now our custom part. In <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/cost.yaml">model/cost.yaml</a> we define a brand-new, never-before-seen attribute called <code>acme.cost.code</code> inside its own attribute group and we give some human readable descriptions. Importantly these examples and descriptions are NOT what weaver looks at to decide whether live telemetry is "correct" or not. This is PURE human readable metadata.</p>
 <h2 id="the-valid-value">The valid value<a class="headerlink" href="#the-valid-value" title="Permanent link">&para;</a></h2>
@@ -579,6 +679,8 @@
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"acme.cost.code value &lt;attribute-value&gt; does not match ^[A-Z]{3}[0-9]{4}$"</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
 </span></code></pre></div>
+<h2 id="required-attribute-part-2">Required attribute (Part 2)<a class="headerlink" href="#required-attribute-part-2" title="Permanent link">&para;</a></h2>
+<p>The same file has a second rule, <code>missing_cost_code</code>, which fires when a <code>Resource</code> has no <code>acme.cost.code</code> attribute at all. This is what rejects the unparsed log line in <a href="../log-files/">Part 2</a>: a log body with <code>cost.code=ABC12345</code> inside it is just text, not an attribute.</p>
 
 
 
@@ -631,6 +733,22 @@
             </div>
           </a>
         
+        
+          
+          <a href="../log-files/" class="md-footer__link md-footer__link--next" aria-label="Next: Part 2 - Log Files">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Part 2 - Log Files
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

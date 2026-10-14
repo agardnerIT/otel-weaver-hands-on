@@ -232,17 +232,18 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="get-started/" class="md-tabs__link">
-        
-  
-  
     
+    
+      <li class="md-tabs__item">
+        <a href="get-started/" class="md-tabs__link">
+          
   
-  Get Started
+  
+  Part 1 - Basics
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -252,32 +253,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="interpreting-output/" class="md-tabs__link">
+      <a href="log-files/" class="md-tabs__link">
         
   
   
     
   
-  Interpreting Output
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="how-it-works/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  How It Works
+  Part 2 - Log Files
 
       </a>
     </li>
@@ -418,6 +400,60 @@
   
   
   
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 - Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Part 1 - Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="get-started/" class="md-nav__link">
         
@@ -438,9 +474,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
@@ -465,9 +502,10 @@
     </li>
   
 
-    
-      
-      
+              
+            
+              
+                
   
   
   
@@ -481,6 +519,41 @@
     
   
     How It Works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="log-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 - Log Files
   
 
     
@@ -576,10 +649,15 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p>You'll need Python and Docker installed (or equivalent so you can run <code>docker ps</code>).</p>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p><strong>Part 1: the basics</strong></p>
 <ol>
-<li><a href="get-started/">Get started</a>: clone the repo and run Weaver</li>
+<li><a href="get-started/">Get started</a>: clone the repo and run Weaver against a small Python script that emits 3 log records</li>
 <li><a href="interpreting-output/">Interpret the output</a>: understand what Weaver tells you</li>
 <li><a href="how-it-works/">How it works</a>: see how the conventions and policy are defined</li>
+</ol>
+<p><strong>Part 2: a realistic example</strong></p>
+<ol>
+<li><a href="log-files/">Checking log files</a>: check plain-text log lines with an OpenTelemetry Collector, then fix the Collector config until Weaver is happy</li>
 </ol>
 
 
