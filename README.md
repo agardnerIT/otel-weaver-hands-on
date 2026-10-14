@@ -121,3 +121,29 @@ Resource
 * Log record 3 is `NOT COMPLIANT` because it contains a `Resource` attribute with:
     * `service.name = team-c` = Valid OpenTelemetry attribute name and value
     * `cost.code = ABC1234` = Valid `value` but an `invalid` key (should be `acme.cost.code` not `cost.code`
+
+## Explain it, that felt like magic
+
+The story starts with the [manifest.yaml](manifest.yaml) file. This file says "we're defining a new schema called `acme` and also importing another pre-existing schema from the OpenTelemetry project.
+
+[manifest.yaml](manifest.yaml) pairs with [model/imports.yaml](model/imports.yaml) and this file just tells weaver to import everything from the dependencies (ie. the pre-existing OTEL semantic conventions).
+
+Now our custom part. In [model/cost.yaml](model/cost.yaml) we define a brand-new, never-before-seen attribute called `acme.cost.code` inside it's own attribute group and we give some human readable descriptions. Importantly these examples and descriptions are NOT what weaver looks at to decide whether live telemetry is "correct" or not. This is PURE human readable metadata.
+
+We have the key defined as `acme.cost.code` but how do we tell Weaver the valid value syntax? We do so in [policies/cost_code.rego](policies/cost_code.rego. This `.rego` file (pronounced RAY-GO) checks every piece of incoming telemetry and if lines 6-9 **ALL MATCH** then the rule fires:
+
+1) The input is an attribute
+2) The attribute has a name (key) of `acme.cost.code`
+3) The value of `acme.cost.code` is a string (weaver still catches and reports any value that isn't a string because that's mandated in [policies/cost_code.rego](policies/cost_code.rego))
+4) The value does **NOT** match the regex of `ABC1234`
+
+If those 4 things are true, a result is sent back to weaver:
+
+```
+{
+  "id": "invalid_cost_code",
+  "level": "violation",
+  "context": { <attribute-name> : <attribute-value> },
+  "message": "acme.cost.code value <attribute-value> does not match ^[A-Z]{3}[0-9]{4}$"
+}
+```
