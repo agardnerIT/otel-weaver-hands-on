@@ -52,6 +52,8 @@ docker run --rm -v "$(pwd)":/work -w /work -p 4317:4317 -p 4320:4320 otel/weaver
 
 ### Terminal 2
 
+This Python file will send 3 log records to Weaver then exit.
+
 ```
 python emit_test_logs.py
 ```
