@@ -1,7 +1,5 @@
 # Hands on with OpenTelemetry Weaver
 
-Define and validate telemetry with custom semantic conventions using OpenTelemetry Weaver.
-
 In this demo we imagine that we work for the `ACME Corporation` and we want to define a new standard attribute across our organisation to represent a `cost code`. Our organisation mandates that this cost code be present on every telemetry record so that we can efficiently cross charge storage costs by cost centre. Furthermore, our organisation mandates that every cost code has the syntax: `[UPPERCASE_ALPHA]{3}[NUMBERS][4]` for example: `ABC1234`.
 
 That's easy to say, harder to do in a large enterprise:
