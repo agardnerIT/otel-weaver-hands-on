@@ -10,9 +10,15 @@ In this demo we imagine that we work for the `ACME Corporation` and define a sta
 
 The full walkthrough lives in [docs/](docs/index.md):
 
+**Part 1: the basics**
+
 1. [Get started](docs/get-started.md)
 2. [Interpreting output](docs/interpreting-output.md)
 3. [How it works](docs/how-it-works.md)
+
+**Part 2: a realistic example**
+
+4. [Checking log files](docs/log-files.md): a Collector `filelog` receiver sends plain-text logs to Weaver
 
 To view it as a site locally:
 

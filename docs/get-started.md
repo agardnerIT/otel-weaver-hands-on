@@ -1,4 +1,4 @@
-# Get Started
+# Get Started (Part 1)
 
 ```bash
 git clone https://github.com/agardnerIT/otel-weaver-hands-on
@@ -13,7 +13,7 @@ pip install -r requirements.txt
 docker pull otel/weaver
 
 # Validate the file syntax (should be OK on a fresh clone)
-docker run --rm -v "$(pwd)":/work -w /work otel/weaver registry check -r /work
+docker run --rm -v "$(pwd)":/work -w /work otel/weaver registry check -r /work/model
 ```
 
 Now open 2 terminal windows:
@@ -26,7 +26,7 @@ Now open 2 terminal windows:
 Will run for 30s or until you press `Ctrl+C`:
 
 ```bash
-docker run --rm -v "$(pwd)":/work -w /work -p 4317:4317 -p 4320:4320 otel/weaver registry live-check -r /work --advice-policies /work/policies --otlp-grpc-address 0.0.0.0 --inactivity-timeout 30
+docker run --rm -v "$(pwd)":/work -w /work -p 4317:4317 -p 4320:4320 otel/weaver registry live-check -r /work/model --advice-policies /work/policies --otlp-grpc-address 0.0.0.0 --inactivity-timeout 30
 ```
 
 ## Terminal 2
@@ -47,4 +47,4 @@ You will see:
 
 When the script is finished, you can switch to Terminal 1 and press Ctrl+C to stop Weaver.
 
-Next: [interpret the output](interpreting-output.md).
+Next: [interpret the output](interpreting-output.md). Once you're comfortable, move on to [Part 2: checking log files](log-files.md).

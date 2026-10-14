@@ -1,8 +1,8 @@
 # How it works
 
-The story starts with the [manifest.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/manifest.yaml) file. This file says "we're defining a new schema called `acme` and also importing another pre-existing schema from the OpenTelemetry project."
+The story starts with the [model/manifest.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/manifest.yaml) file. This file says "we're defining a new schema called `acme` and also importing another pre-existing schema from the OpenTelemetry project."
 
-[manifest.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/manifest.yaml) pairs with [model/imports.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/imports.yaml) and this file just tells weaver to import everything from the dependencies (i.e. the pre-existing OTEL semantic conventions).
+[model/manifest.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/manifest.yaml) pairs with [model/imports.yaml](https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/model/imports.yaml) and this file just tells weaver to import everything from the dependencies (i.e. the pre-existing OTEL semantic conventions).
 
 ## The attribute key
 
@@ -27,3 +27,7 @@ If those 4 things are true, a result is sent back to weaver:
   "message": "acme.cost.code value <attribute-value> does not match ^[A-Z]{3}[0-9]{4}$"
 }
 ```
+
+## Required attribute (Part 2)
+
+The same file has a second rule, `missing_cost_code`, which fires when a `Resource` has no `acme.cost.code` attribute at all. This is what rejects the unparsed log line in [Part 2](log-files.md): a log body with `cost.code=ABC12345` inside it is just text, not an attribute.

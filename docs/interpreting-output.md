@@ -87,7 +87,7 @@ Advisories given
 Registry coverage
   - total seen: 1.3%
 
-✔ Performed live check for registry `/work`
+✔ Performed live check for registry `/work/model`
 
 Total execution time: 35.302828683s
 ```

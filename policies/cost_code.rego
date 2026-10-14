@@ -13,6 +13,21 @@ deny contains make_finding(id, level, context, message) if {
 	message := sprintf("acme.cost.code value '%s' does not match ^[A-Z]{3}[0-9]{4}$", [input.sample.attribute.value])
 }
 
+# Every Resource must carry acme.cost.code
+deny contains make_finding(id, level, context, message) if {
+	input.sample.resource
+	not has_cost_code(input.sample.resource.attributes)
+	id := "missing_cost_code"
+	level := "violation"
+	context := {"attribute_name": "acme.cost.code"}
+	message := "Resource is missing required attribute 'acme.cost.code'"
+}
+
+has_cost_code(attributes) if {
+	some attr in attributes
+	attr.name == "acme.cost.code"
+}
+
 make_finding(id, level, context, message) := {
 	"id": id,
 	"level": level,

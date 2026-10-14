@@ -1,0 +1,26 @@
+# v1: naive config. Ships each line as an unparsed log body.
+receivers:
+  filelog:
+    include: [/logs/app.log]
+    start_at: end
+
+processors:
+  resource:
+    attributes:
+      - key: service.name
+        value: acme-web
+        action: upsert
+
+exporters:
+  otlp:
+    endpoint: host.docker.internal:4317
+    compression: none  # Weaver does not accept gzip
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    logs:
+      receivers: [filelog]
+      processors: [resource]
+      exporters: [otlp]

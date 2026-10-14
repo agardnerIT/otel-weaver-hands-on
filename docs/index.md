@@ -23,6 +23,12 @@ You'll need Python and Docker installed (or equivalent so you can run `docker ps
 
 ## Next steps
 
-1. [Get started](get-started.md): clone the repo and run Weaver
+**Part 1: the basics**
+
+1. [Get started](get-started.md): clone the repo and run Weaver against a small Python script that emits 3 log records
 2. [Interpret the output](interpreting-output.md): understand what Weaver tells you
 3. [How it works](how-it-works.md): see how the conventions and policy are defined
+
+**Part 2: a realistic example**
+
+4. [Checking log files](log-files.md): check plain-text log lines with an OpenTelemetry Collector, then fix the Collector config until Weaver is happy
