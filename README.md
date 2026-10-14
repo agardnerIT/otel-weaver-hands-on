@@ -1,5 +1,7 @@
 # Hands on with OpenTelemetry Weaver
 
+> Weaver is a way to ensure your telemetry "looks right" and to give developers, SREs and teams a common language and set of tooling to make this easy enterprise-wide.
+
 ![weaver overview](assets/weaver-overview.png)
 
 In this demo we imagine that we work for the `ACME Corporation` and we want to define a new standard attribute across our organisation to represent a `cost code`. Our organisation mandates that this cost code be present on every telemetry record so that we can efficiently cross charge storage costs by cost centre. Furthermore, our organisation mandates that every cost code has the syntax: `[UPPERCASE_ALPHA]{3}[NUMBERS][4]` for example: `ABC1234`.
