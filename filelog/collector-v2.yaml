@@ -13,16 +13,18 @@ receivers:
       - type: move
         from: attributes.method
         to: attributes["http.request.method"]
-      - type: move
-        from: attributes.status
-        to: attributes["http.response.status_code"]
+      # semconv requires an int, regex captures are strings
+      - type: add
+        field: attributes["http.response.status_code"]
+        value: EXPR(int(attributes.status))
+      - type: remove
+        field: attributes.status
       - type: move
         from: attributes.path
         to: attributes["url.path"]
       - type: move
         from: attributes.client
         to: attributes["client.address"]
-      # Promoted to the Resource by the transform processor below
       - type: move
         from: attributes.cost_code
         to: attributes["acme.cost.code"]
@@ -33,14 +35,10 @@ processors:
       - key: service.name
         value: acme-web
         action: upsert
-  transform:
-    log_statements:
-      - set(resource.attributes["acme.cost.code"], log.attributes["acme.cost.code"])
-      - delete_key(log.attributes, "acme.cost.code")
-      # http.response.status_code must be an int per semconv
-      - set(log.attributes["http.response.status_code"], Int(log.attributes["http.response.status_code"]))
 
 exporters:
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: host.docker.internal:4317
     compression: none  # Weaver does not accept gzip
@@ -51,5 +49,5 @@ service:
   pipelines:
     logs:
       receivers: [filelog]
-      processors: [resource, transform]
-      exporters: [otlp]
+      processors: [resource]
+      exporters: [debug, otlp]

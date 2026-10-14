@@ -4,6 +4,8 @@ In [Part 1](get-started.md) a Python script sent perfectly structured telemetry 
 
 Weaver can't read log files itself, but a Collector can: `filelog` receiver → `otlp` exporter → Weaver's OTLP listener.
 
+![logs with collector and weaver architecture](assets/logs-with-collector-and-weaver.jpg)
+
 In this scenario a user writes a log line to a file. Weaver rejects it because it isn't parsed into OTEL and ACME attributes. You then restart the Collector with a config that does the parsing, and Weaver accepts the next line.
 
 !!! note "Registry location"
@@ -30,12 +32,12 @@ docker run --rm --name col -v "$(pwd)/filelog":/cfg -v "$(pwd)/filelog/logs":/lo
 echo 'INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC12345' >> filelog/logs/app.log
 ```
 
-The line is shipped as an unparsed body. The `Resource` has no `acme.cost.code`, so Weaver reports:
+The line is shipped as an unparsed body. The log record has no `acme.cost.code` attribute, so Weaver reports:
 
 ```text
-Resource
-    - [violation] Resource is missing required attribute 'acme.cost.code'
-    service.name = acme-web
+Log
+    - [violation] Log record is missing required attribute 'acme.cost.code'
+    log.file.name = app.log
 ```
 
 ## Fix it: Collector v2 (parses the line)
@@ -46,7 +48,7 @@ Stop the Collector in Terminal 2 (`Ctrl+C`) and start it with [collector-v2.yaml
 docker run --rm --name col -v "$(pwd)/filelog":/cfg -v "$(pwd)/filelog/logs":/logs otel/opentelemetry-collector-contrib:latest --config /cfg/collector-v2.yaml
 ```
 
-It uses a `regex_parser` to turn the line into attributes:
+It uses a `regex_parser` to turn the line into attributes, all on the log record, just like the Python script in Part 1:
 
 | Log text | Attribute | Where |
 |---|---|---|
@@ -54,7 +56,7 @@ It uses a `regex_parser` to turn the line into attributes:
 | `200` | `http.response.status_code` (int) | Log record |
 | `/someEndpoint` | `url.path` | Log record |
 | `201.0.100.2` | `client.address` | Log record |
-| `cost.code=...` | `acme.cost.code` | **Resource** (promoted by the `transform` processor) |
+| `cost.code=...` | `acme.cost.code` | Log record |
 
 Now write a second line. Note the cost code has **four** digits. `ABC12345` (five digits) would still violate the `^[A-Z]{3}[0-9]{4}$` rule, so try that too once you've seen the green result.
 
@@ -65,15 +67,13 @@ echo 'INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234' >> filel
 Weaver now shows no violations:
 
 ```text
-Resource
-    service.name = acme-web
-    acme.cost.code = ABC1234
-
 Log
+    log.file.name = app.log
+    client.address = 201.0.100.2
+    acme.cost.code = ABC1234
     http.request.method = GET
     http.response.status_code = 200
     url.path = /someEndpoint
-    client.address = 201.0.100.2
 ```
 
 The only advice left is an `improvement` that `log.file.name` isn't stable yet. That is informational, not a failure.

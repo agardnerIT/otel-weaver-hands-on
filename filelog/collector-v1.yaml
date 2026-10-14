@@ -12,6 +12,8 @@ processors:
         action: upsert
 
 exporters:
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: host.docker.internal:4317
     compression: none  # Weaver does not accept gzip
@@ -23,4 +25,4 @@ service:
     logs:
       receivers: [filelog]
       processors: [resource]
-      exporters: [otlp]
+      exporters: [debug, otlp]

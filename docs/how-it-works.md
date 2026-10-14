@@ -30,4 +30,4 @@ If those 4 things are true, a result is sent back to weaver:
 
 ## Required attribute (Part 2)
 
-The same file has a second rule, `missing_cost_code`, which fires when a `Resource` has no `acme.cost.code` attribute at all. This is what rejects the unparsed log line in [Part 2](log-files.md): a log body with `cost.code=ABC12345` inside it is just text, not an attribute.
+The same file has a second rule, `missing_cost_code`, which fires when a log record has no `acme.cost.code` attribute at all. This is also what flags the `cost-code` record in Part 1, and it rejects the unparsed log line in [Part 2](log-files.md): a log body with `cost.code=ABC12345` inside it is just text, not an attribute.

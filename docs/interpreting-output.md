@@ -4,92 +4,87 @@ Weaver offers JSON and YAML output but by default we use the terminal output as 
 
 In `Terminal 1` you should see 3 repeated output blocks of `Resource`, `Instrumentation scope` and `Log` - one per log line.
 
-Focus on the `Resource` output.
+Focus on the `Log` output. That's where the `acme.cost.code` attribute lives. (The `Resource` blocks only differ by `service.name` and carry one `improvement` each, because the OpenTelemetry-added `service.instance.id` attribute isn't stable yet. That's fine, we should be aware of it, but it's nothing serious.)
 
 ## Record 1: compliant
 
 ```text
-Resource
-    telemetry.sdk.language = python
-    telemetry.sdk.name = opentelemetry
-    telemetry.sdk.version = 1.45.1
-    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-    service.name = team-a
+Instrumentation scope good
+
+Log
     acme.cost.code = ABC1234
+    code.file.path = /path/to/emit_test_logs.py
+    code.function.name = <module>
+    code.line.number = 28
 ```
 
-The first block should only have one yellow `improvement` telling you that one of the OpenTelemetry automatically-added attributes `service.instance.id` is not yet declared as stable. That's fine, we should be aware of it, but it's nothing serious. Other than that, all other attributes are green and OK.
+Every attribute is green. The key exists and the value matches the cost code format.
 
 ## Record 2: invalid value
 
 The second block has a more serious warning - a violation - and it's telling us that the `value` for `acme.cost.code` doesn't match the regex rule.
 
 ```text
-Resource
-    telemetry.sdk.language = python
-    telemetry.sdk.name = opentelemetry
-    telemetry.sdk.version = 1.45.1
-    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-    service.name = team-b
+Instrumentation scope bad-format
+
+Log
     acme.cost.code = abc-12
         - [violation] acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$
+    code.file.path = /path/to/emit_test_logs.py
+    code.function.name = <module>
+    code.line.number = 28
 ```
 
 ## Record 3: invalid key
 
-The third `Resource` block has a different violation - this one is telling us that the key is wrong and that `cost-code` doesn't exist anywhere in the ACME corp schema.
+The third `Log` block has two violations. The key is wrong (`cost-code` doesn't exist anywhere in the ACME corp schema) and, as a result, the required `acme.cost.code` attribute is missing altogether.
 
 ```text
-Resource
-    telemetry.sdk.language = python
-    telemetry.sdk.name = opentelemetry
-    telemetry.sdk.version = 1.45.1
-    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-    service.name = team-c
+Instrumentation scope wrong-key
+
+Log
+    - [violation] Log record is missing required attribute 'acme.cost.code'
     cost-code = ABC1234
         - [violation] Attribute 'cost-code' does not exist in the registry.
+    code.file.path = /path/to/emit_test_logs.py
+    code.function.name = <module>
+    code.line.number = 28
 ```
 
 ## Demo telemetry explained
 
-- Log record 1 is `COMPLIANT` because it contains a `Resource` attribute with:
-    - `service.name = team-a` = Valid OpenTelemetry attribute name and value
+- Log record 1 is `COMPLIANT` because it contains a log attribute with:
     - `acme.cost.code = ABC1234` = Valid ACME Corp cost code key and value
-- Log record 2 is `NOT COMPLIANT` because it contains a `Resource` attribute with:
-    - `service.name = team-b` = Valid OpenTelemetry attribute name and value
+- Log record 2 is `NOT COMPLIANT` because it contains a log attribute with:
     - `acme.cost.code = abc-12` = Valid ACME Corp cost code key but an `invalid` value
-- Log record 3 is `NOT COMPLIANT` because it contains a `Resource` attribute with:
-    - `service.name = team-c` = Valid OpenTelemetry attribute name and value
-    - `cost-code = ABC1234` = Valid `value` but an `invalid` key (should be `acme.cost.code` not `cost-code`)
+- Log record 3 is `NOT COMPLIANT` because it contains a log attribute with:
+    - `cost-code = ABC1234` = Valid `value` but an `invalid` key (should be `acme.cost.code` not `cost-code`), so the required attribute is also missing
 
 ## Summary
 
-At the end of the output is a summary section that shows this check took `35s` to complete, the telemetry received covered only 1.3% of the total available attributes (remember we're including the entire OTEL conventions too), and there were 5 pieces of advice given: 2 violations and 3 improvement suggestions, plus specifics on what that advice was.
+At the end of the output is a summary section. The telemetry received covered only 1.3% of the total available attributes (remember we're including the entire OTEL conventions too), and there were 6 pieces of advice given: 3 violations and 3 improvement suggestions, plus specifics on what that advice was.
 
 ```text
 Advisories given
-  - total: 5
+  - total: 6
   - advice level:
     - improvement: 3
-    - violation: 2
+    - violation: 3
   - advice type:
     - invalid_cost_code: 1
     - missing_attribute: 1
+    - missing_cost_code: 1
     - not_stable: 3
   - advice message:
     - Attribute 'cost-code' does not exist in the registry.: 1
     - Attribute 'service.instance.id' is not stable; stability = development.: 3
+    - Log record is missing required attribute 'acme.cost.code': 1
     - acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$: 1
 
 Registry coverage
   - total seen: 1.3%
 
 ✔ Performed live check for registry `/work/model`
-
-Total execution time: 35.302828683s
 ```
 
 ## Programmatic access

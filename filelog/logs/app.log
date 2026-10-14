@@ -1,0 +1,6 @@
+INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC12345
+INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234
+INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234
+INFOX HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234
+WARN HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234
+WARNING HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234

@@ -19,7 +19,7 @@ docker run --rm -v "$(pwd)":/work -w /work otel/weaver registry check -r /work/m
 Now open 2 terminal windows:
 
 - Terminal 1 will be running `weaver` in `live-check` mode. This is a server that accepts incoming telemetry and checks that telemetry against your conventions. After a certain (configurable) amount of time, the process will end (you can also press Ctrl+C to prematurely stop it) and a report will be generated.
-- Terminal 2 will be used to send demo telemetry to weaver. In this demo we send 3 log lines (each attached to its own `Resource`).
+- Terminal 2 will be used to send demo telemetry to weaver. In this demo we send 3 log lines, each carrying its own cost code attribute.
 
 ## Terminal 1
 
