@@ -74,6 +74,9 @@ plugins:
 
 nav:
   - Home: index.md
+  - Get Started: get-started.md
+  - Interpreting Output: interpreting-output.md
+  - How It Works: how-it-works.md
 extra:
   social:
     - icon: fontawesome/brands/github
