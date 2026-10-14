@@ -128,6 +128,34 @@ Resource
     * `service.name = team-c` = Valid OpenTelemetry attribute name and value
     * `cost.code = ABC1234` = Valid `value` but an `invalid` key (should be `acme.cost.code` not `cost.code`
 
+At the end of the output is a summary section that shows this check took `35s` to complete, the telemetry received covered only 1.3% of the total available attributes (remember we're including the entire OTEL conventions too), There were 5 pieces of advice given: 2 violations and 3 improvement suggestions + specifics on what that advice was.
+
+```
+Advisories given
+  - total: 5
+  - advice level:
+    - improvement: 3
+    - violation: 2
+  - advice type:
+    - invalid_cost_code: 1
+    - missing_attribute: 1
+    - not_stable: 3
+  - advice message:
+    - Attribute 'cost-code' does not exist in the registry.: 1
+    - Attribute 'service.instance.id' is not stable; stability = development.: 3
+    - acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$: 1
+
+Registry coverage
+  - total seen: 1.3%
+
+✔ Performed live check for registry `/work`
+
+Total execution time: 35.302828683s
+```
+
+### Programmatic Access
+All of this data is available as a JSON or YAML output by using the `--output json` or `--output yaml` flag meaning developers and SREs can bake these tests into CI/CD processes and pipelines.
+
 ## Explain it, that felt like magic
 
 The story starts with the [manifest.yaml](manifest.yaml) file. This file says "we're defining a new schema called `acme` and also importing another pre-existing schema from the OpenTelemetry project.
