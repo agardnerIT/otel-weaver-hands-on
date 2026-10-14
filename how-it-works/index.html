@@ -680,7 +680,7 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <h2 id="required-attribute-part-2">Required attribute (Part 2)<a class="headerlink" href="#required-attribute-part-2" title="Permanent link">&para;</a></h2>
-<p>The same file has a second rule, <code>missing_cost_code</code>, which fires when a <code>Resource</code> has no <code>acme.cost.code</code> attribute at all. This is what rejects the unparsed log line in <a href="../log-files/">Part 2</a>: a log body with <code>cost.code=ABC12345</code> inside it is just text, not an attribute.</p>
+<p>The same file has a second rule, <code>missing_cost_code</code>, which fires when a log record has no <code>acme.cost.code</code> attribute at all. This is also what flags the <code>cost-code</code> record in Part 1, and it rejects the unparsed log line in <a href="../log-files/">Part 2</a>: a log body with <code>cost.code=ABC12345</code> inside it is just text, not an attribute.</p>
 
 
 

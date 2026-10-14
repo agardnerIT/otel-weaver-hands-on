@@ -727,82 +727,77 @@
 <h1 id="interpreting-output">Interpreting output<a class="headerlink" href="#interpreting-output" title="Permanent link">&para;</a></h1>
 <p>Weaver offers JSON and YAML output but by default we use the terminal output as it's more human-friendly.</p>
 <p>In <code>Terminal 1</code> you should see 3 repeated output blocks of <code>Resource</code>, <code>Instrumentation scope</code> and <code>Log</code> - one per log line.</p>
-<p>Focus on the <code>Resource</code> output.</p>
+<p>Focus on the <code>Log</code> output. That's where the <code>acme.cost.code</code> attribute lives. (The <code>Resource</code> blocks only differ by <code>service.name</code> and carry one <code>improvement</code> each, because the OpenTelemetry-added <code>service.instance.id</code> attribute isn't stable yet. That's fine, we should be aware of it, but it's nothing serious.)</p>
 <h2 id="record-1-compliant">Record 1: compliant<a class="headerlink" href="#record-1-compliant" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Resource
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    telemetry.sdk.language = python
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    telemetry.sdk.name = opentelemetry
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    telemetry.sdk.version = 1.45.1
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    service.name = team-a
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    acme.cost.code = ABC1234
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Instrumentation scope good
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Log
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    acme.cost.code = ABC1234
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    code.file.path = /path/to/emit_test_logs.py
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    code.function.name = &lt;module&gt;
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    code.line.number = 28
 </span></code></pre></div>
-<p>The first block should only have one yellow <code>improvement</code> telling you that one of the OpenTelemetry automatically-added attributes <code>service.instance.id</code> is not yet declared as stable. That's fine, we should be aware of it, but it's nothing serious. Other than that, all other attributes are green and OK.</p>
+<p>Every attribute is green. The key exists and the value matches the cost code format.</p>
 <h2 id="record-2-invalid-value">Record 2: invalid value<a class="headerlink" href="#record-2-invalid-value" title="Permanent link">&para;</a></h2>
 <p>The second block has a more serious warning - a violation - and it's telling us that the <code>value</code> for <code>acme.cost.code</code> doesn't match the regex rule.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Resource
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    telemetry.sdk.language = python
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    telemetry.sdk.name = opentelemetry
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    telemetry.sdk.version = 1.45.1
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    service.name = team-b
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    acme.cost.code = abc-12
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        - [violation] acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Instrumentation scope bad-format
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Log
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    acme.cost.code = abc-12
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        - [violation] acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    code.file.path = /path/to/emit_test_logs.py
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    code.function.name = &lt;module&gt;
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    code.line.number = 28
 </span></code></pre></div>
 <h2 id="record-3-invalid-key">Record 3: invalid key<a class="headerlink" href="#record-3-invalid-key" title="Permanent link">&para;</a></h2>
-<p>The third <code>Resource</code> block has a different violation - this one is telling us that the key is wrong and that <code>cost-code</code> doesn't exist anywhere in the ACME corp schema.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Resource
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    telemetry.sdk.language = python
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    telemetry.sdk.name = opentelemetry
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    telemetry.sdk.version = 1.45.1
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    service.instance.id = 4225e7a7-66d8-4b83-bb87-934ac7e23988
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        - [improvement] Attribute 'service.instance.id' is not stable; stability = development.
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    service.name = team-c
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    cost-code = ABC1234
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        - [violation] Attribute 'cost-code' does not exist in the registry.
+<p>The third <code>Log</code> block has two violations. The key is wrong (<code>cost-code</code> doesn't exist anywhere in the ACME corp schema) and, as a result, the required <code>acme.cost.code</code> attribute is missing altogether.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Instrumentation scope wrong-key
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Log
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    - [violation] Log record is missing required attribute 'acme.cost.code'
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    cost-code = ABC1234
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        - [violation] Attribute 'cost-code' does not exist in the registry.
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    code.file.path = /path/to/emit_test_logs.py
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    code.function.name = &lt;module&gt;
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    code.line.number = 28
 </span></code></pre></div>
 <h2 id="demo-telemetry-explained">Demo telemetry explained<a class="headerlink" href="#demo-telemetry-explained" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Log record 1 is <code>COMPLIANT</code> because it contains a <code>Resource</code> attribute with:<ul>
-<li><code>service.name = team-a</code> = Valid OpenTelemetry attribute name and value</li>
+<li>Log record 1 is <code>COMPLIANT</code> because it contains a log attribute with:<ul>
 <li><code>acme.cost.code = ABC1234</code> = Valid ACME Corp cost code key and value</li>
 </ul>
 </li>
-<li>Log record 2 is <code>NOT COMPLIANT</code> because it contains a <code>Resource</code> attribute with:<ul>
-<li><code>service.name = team-b</code> = Valid OpenTelemetry attribute name and value</li>
+<li>Log record 2 is <code>NOT COMPLIANT</code> because it contains a log attribute with:<ul>
 <li><code>acme.cost.code = abc-12</code> = Valid ACME Corp cost code key but an <code>invalid</code> value</li>
 </ul>
 </li>
-<li>Log record 3 is <code>NOT COMPLIANT</code> because it contains a <code>Resource</code> attribute with:<ul>
-<li><code>service.name = team-c</code> = Valid OpenTelemetry attribute name and value</li>
-<li><code>cost-code = ABC1234</code> = Valid <code>value</code> but an <code>invalid</code> key (should be <code>acme.cost.code</code> not <code>cost-code</code>)</li>
+<li>Log record 3 is <code>NOT COMPLIANT</code> because it contains a log attribute with:<ul>
+<li><code>cost-code = ABC1234</code> = Valid <code>value</code> but an <code>invalid</code> key (should be <code>acme.cost.code</code> not <code>cost-code</code>), so the required attribute is also missing</li>
 </ul>
 </li>
 </ul>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
-<p>At the end of the output is a summary section that shows this check took <code>35s</code> to complete, the telemetry received covered only 1.3% of the total available attributes (remember we're including the entire OTEL conventions too), and there were 5 pieces of advice given: 2 violations and 3 improvement suggestions, plus specifics on what that advice was.</p>
+<p>At the end of the output is a summary section. The telemetry received covered only 1.3% of the total available attributes (remember we're including the entire OTEL conventions too), and there were 6 pieces of advice given: 3 violations and 3 improvement suggestions, plus specifics on what that advice was.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Advisories given
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  - total: 5
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  - total: 6
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  - advice level:
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    - improvement: 3
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    - violation: 2
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    - violation: 3
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  - advice type:
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    - invalid_cost_code: 1
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    - missing_attribute: 1
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    - not_stable: 3
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>  - advice message:
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    - Attribute 'cost-code' does not exist in the registry.: 1
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    - Attribute 'service.instance.id' is not stable; stability = development.: 3
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    - acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$: 1
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>Registry coverage
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>  - total seen: 1.3%
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>✔ Performed live check for registry `/work/model`
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    - missing_cost_code: 1
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    - not_stable: 3
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>  - advice message:
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    - Attribute 'cost-code' does not exist in the registry.: 1
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    - Attribute 'service.instance.id' is not stable; stability = development.: 3
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    - Log record is missing required attribute 'acme.cost.code': 1
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    - acme.cost.code value 'abc-12' does not match ^[A-Z]{3}[0-9]{4}$: 1
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>Registry coverage
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>  - total seen: 1.3%
 </span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>Total execution time: 35.302828683s
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>✔ Performed live check for registry `/work/model`
 </span></code></pre></div>
 <h2 id="programmatic-access">Programmatic access<a class="headerlink" href="#programmatic-access" title="Permanent link">&para;</a></h2>
 <p>All of this data is available as JSON or YAML output by using the <code>--output json</code> or <code>--output yaml</code> flag, meaning developers and SREs can bake these tests into CI/CD processes and pipelines.</p>

@@ -700,6 +700,7 @@
 <h1 id="checking-log-files-part-2">Checking log files (Part 2)<a class="headerlink" href="#checking-log-files-part-2" title="Permanent link">&para;</a></h1>
 <p>In <a href="../get-started/">Part 1</a> a Python script sent perfectly structured telemetry straight to Weaver. Real applications often just write text lines to a file. This part shows how to check those.</p>
 <p>Weaver can't read log files itself, but a Collector can: <code>filelog</code> receiver → <code>otlp</code> exporter → Weaver's OTLP listener.</p>
+<p><img alt="logs with collector and weaver architecture" src="../assets/logs-with-collector-and-weaver.jpg" /></p>
 <p>In this scenario a user writes a log line to a file. Weaver rejects it because it isn't parsed into OTEL and ACME attributes. You then restart the Collector with a config that does the parsing, and Weaver accepts the next line.</p>
 <div class="admonition note">
 <p class="admonition-title">Registry location</p>
@@ -716,16 +717,16 @@
 <h2 id="terminal-3-write-a-log-line">Terminal 3: write a log line<a class="headerlink" href="#terminal-3-write-a-log-line" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC12345'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>filelog/logs/app.log
 </span></code></pre></div>
-<p>The line is shipped as an unparsed body. The <code>Resource</code> has no <code>acme.cost.code</code>, so Weaver reports:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Resource
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    - [violation] Resource is missing required attribute 'acme.cost.code'
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    service.name = acme-web
+<p>The line is shipped as an unparsed body. The log record has no <code>acme.cost.code</code> attribute, so Weaver reports:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Log
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    - [violation] Log record is missing required attribute 'acme.cost.code'
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    log.file.name = app.log
 </span></code></pre></div>
 <h2 id="fix-it-collector-v2-parses-the-line">Fix it: Collector v2 (parses the line)<a class="headerlink" href="#fix-it-collector-v2-parses-the-line" title="Permanent link">&para;</a></h2>
 <p>Stop the Collector in Terminal 2 (<code>Ctrl+C</code>) and start it with <a href="https://github.com/agardnerIT/otel-weaver-hands-on/blob/main/filelog/collector-v2.yaml">collector-v2.yaml</a>:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--name<span class="w"> </span>col<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/filelog"</span>:/cfg<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/filelog/logs"</span>:/logs<span class="w"> </span>otel/opentelemetry-collector-contrib:latest<span class="w"> </span>--config<span class="w"> </span>/cfg/collector-v2.yaml
 </span></code></pre></div>
-<p>It uses a <code>regex_parser</code> to turn the line into attributes:</p>
+<p>It uses a <code>regex_parser</code> to turn the line into attributes, all on the log record, just like the Python script in Part 1:</p>
 <table>
 <thead>
 <tr>
@@ -758,7 +759,7 @@
 <tr>
 <td><code>cost.code=...</code></td>
 <td><code>acme.cost.code</code></td>
-<td><strong>Resource</strong> (promoted by the <code>transform</code> processor)</td>
+<td>Log record</td>
 </tr>
 </tbody>
 </table>
@@ -766,15 +767,13 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'INFO HTTP GET 200 OK /someEndpoint 201.0.100.2 cost.code=ABC1234'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>filelog/logs/app.log
 </span></code></pre></div>
 <p>Weaver now shows no violations:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Resource
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    service.name = acme-web
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    acme.cost.code = ABC1234
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>Log
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    http.request.method = GET
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    http.response.status_code = 200
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    url.path = /someEndpoint
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    client.address = 201.0.100.2
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Log
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    log.file.name = app.log
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    client.address = 201.0.100.2
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    acme.cost.code = ABC1234
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    http.request.method = GET
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    http.response.status_code = 200
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    url.path = /someEndpoint
 </span></code></pre></div>
 <p>The only advice left is an <code>improvement</code> that <code>log.file.name</code> isn't stable yet. That is informational, not a failure.</p>
 <h2 id="gotchas">Gotchas<a class="headerlink" href="#gotchas" title="Permanent link">&para;</a></h2>
